@@ -1,4 +1,4 @@
-AC_INIT([libegoev3], [0.1A], [github.com/Davester47/lib-lego-ev3])
+AC_INIT([legoev3], [0.1A], [github.com/Davester47/legoev3])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PROG_CC
 AC_PROG_RANLIB
