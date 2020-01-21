@@ -18,7 +18,22 @@ make install
 
 Legoev3's functions are available by including `#include <ev3.h>`. It needs to
 be initialized with `ev3Init();` and at the end of the program it needs to be freed
-with `ev3Free();` To link against legoev3, use `-lc_output -legoev3`. The compiler
+with `ev3Free();`
+Here's an example:
+
+```C
+#include <ev3.h>
+
+int main() {
+  ev3Init();
+  //
+  // Do some cool stuff in here. For more information, check out example/example.c
+  //
+  ev3Free();
+}
+```
+
+To link against legoev3, use `-lc_output -legoev3`. The linker
 flag `-Wl,-rpath,/home/root/lms2012/sys/lib` is required to use legoev3. You will
 need to upload it to the EV3 with a program like https://github.com/c4ev3/ev3duder.
 
@@ -31,4 +46,4 @@ tells the program where to find them.
 
 ### Coming Soon:
 
-Input and sensor support is next.
+Input and sensor support is in the works.
