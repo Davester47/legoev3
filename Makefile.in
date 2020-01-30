@@ -98,7 +98,8 @@ am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure \
-	$(am__configure_deps) $(include_HEADERS) $(am__DIST_COMMON)
+	$(am__configure_deps) $(include_HEADERS) $(noinst_HEADERS) \
+	$(am__DIST_COMMON)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
@@ -145,19 +146,19 @@ am__v_AR_1 =
 src_libegoev3_a_AR = $(AR) $(ARFLAGS)
 src_libegoev3_a_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
-am_src_libegoev3_a_OBJECTS = src/ev3.$(OBJEXT)
+am_src_libegoev3_a_OBJECTS = src/libegoev3_a-ev3.$(OBJEXT)
 src_libegoev3_a_OBJECTS = $(am_src_libegoev3_a_OBJECTS)
-src_libc_output_la_LIBADD =
-am_src_libc_output_la_OBJECTS = src/libc_output_la-c_output.lo
-src_libc_output_la_OBJECTS = $(am_src_libc_output_la_OBJECTS)
+output_libc_output_la_LIBADD =
+am_output_libc_output_la_OBJECTS = output/libc_output_la-c_output.lo
+output_libc_output_la_OBJECTS = $(am_output_libc_output_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-src_libc_output_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+output_libc_output_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
-	$(src_libc_output_la_CFLAGS) $(CFLAGS) \
-	$(src_libc_output_la_LDFLAGS) $(LDFLAGS) -o $@
+	$(output_libc_output_la_CFLAGS) $(CFLAGS) \
+	$(output_libc_output_la_LDFLAGS) $(LDFLAGS) -o $@
 am_examples_example_OBJECTS = examples/example-example.$(OBJEXT)
 examples_example_OBJECTS = $(am_examples_example_OBJECTS)
 examples_example_DEPENDENCIES = src/libc_output.la src/libegoev3.a
@@ -181,7 +182,8 @@ DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = examples/$(DEPDIR)/example-example.Po \
-	src/$(DEPDIR)/ev3.Po src/$(DEPDIR)/libc_output_la-c_output.Plo
+	output/$(DEPDIR)/libc_output_la-c_output.Plo \
+	src/$(DEPDIR)/libegoev3_a-ev3.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -201,16 +203,16 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(src_libegoev3_a_SOURCES) $(src_libc_output_la_SOURCES) \
+SOURCES = $(src_libegoev3_a_SOURCES) $(output_libc_output_la_SOURCES) \
 	$(examples_example_SOURCES)
 DIST_SOURCES = $(src_libegoev3_a_SOURCES) \
-	$(src_libc_output_la_SOURCES) $(examples_example_SOURCES)
+	$(output_libc_output_la_SOURCES) $(examples_example_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-HEADERS = $(include_HEADERS)
+HEADERS = $(include_HEADERS) $(noinst_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) \
 	$(LISP)config.h.in
 # Read a list of newline-separated strings from the standard input,
@@ -369,16 +371,19 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-lib_LTLIBRARIES = src/libc_output.la
-src_libc_output_la_LDFLAGS = -avoid-version
-src_libc_output_la_SOURCES = src/c_output.c src/c_output.h \
+lib_LTLIBRARIES = output/libc_output.la
+output_libc_output_la_LDFLAGS = -avoid-version
+output_libc_output_la_SOURCES = output/c_output.c src/c_output.h \
 	src/lms2012.h src/lmstypes.h src/bytecodes.h
-src_libc_output_la_CFLAGS = -DDISABLE_DAISYCHAIN_COM_CALL
+output_libc_output_la_CPPFLAGS = -I$(top_srcdir)/include
+output_libc_output_la_CFLAGS = -DDISABLE_DAISYCHAIN_COM_CALL
 lib_LIBRARIES = src/libegoev3.a
 src_libegoev3_a_SOURCES = src/ev3.c src/lms2012.h src/lmstypes.h src/bytecodes.h
-include_HEADERS = src/ev3.h
+src_libegoev3_a_CPPFLAGS = -I$(top_srcdir)/include
+include_HEADERS = include/ev3.h
+noinst_HEADERS = include/
 examples_example_SOURCES = examples/example.c
-examples_example_CPPFLAGS = -I$(top_srcdir)/src
+examples_example_CPPFLAGS = -I$(top_srcdir)/include
 examples_example_LDADD = src/libc_output.la src/libegoev3.a
 examples_example_LDFLAGS = -rpath /home/root/lms2012/sys/lib
 all: config.h
@@ -515,17 +520,24 @@ src/$(am__dirstamp):
 src/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) src/$(DEPDIR)
 	@: > src/$(DEPDIR)/$(am__dirstamp)
-src/ev3.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/libegoev3_a-ev3.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
 
 src/libegoev3.a: $(src_libegoev3_a_OBJECTS) $(src_libegoev3_a_DEPENDENCIES) $(EXTRA_src_libegoev3_a_DEPENDENCIES) src/$(am__dirstamp)
 	$(AM_V_at)-rm -f src/libegoev3.a
 	$(AM_V_AR)$(src_libegoev3_a_AR) src/libegoev3.a $(src_libegoev3_a_OBJECTS) $(src_libegoev3_a_LIBADD)
 	$(AM_V_at)$(RANLIB) src/libegoev3.a
-src/libc_output_la-c_output.lo: src/$(am__dirstamp) \
-	src/$(DEPDIR)/$(am__dirstamp)
+output/$(am__dirstamp):
+	@$(MKDIR_P) output
+	@: > output/$(am__dirstamp)
+output/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) output/$(DEPDIR)
+	@: > output/$(DEPDIR)/$(am__dirstamp)
+output/libc_output_la-c_output.lo: output/$(am__dirstamp) \
+	output/$(DEPDIR)/$(am__dirstamp)
 
-src/libc_output.la: $(src_libc_output_la_OBJECTS) $(src_libc_output_la_DEPENDENCIES) $(EXTRA_src_libc_output_la_DEPENDENCIES) src/$(am__dirstamp)
-	$(AM_V_CCLD)$(src_libc_output_la_LINK) -rpath $(libdir) $(src_libc_output_la_OBJECTS) $(src_libc_output_la_LIBADD) $(LIBS)
+output/libc_output.la: $(output_libc_output_la_OBJECTS) $(output_libc_output_la_DEPENDENCIES) $(EXTRA_output_libc_output_la_DEPENDENCIES) output/$(am__dirstamp)
+	$(AM_V_CCLD)$(output_libc_output_la_LINK) -rpath $(libdir) $(output_libc_output_la_OBJECTS) $(output_libc_output_la_LIBADD) $(LIBS)
 examples/$(am__dirstamp):
 	@$(MKDIR_P) examples
 	@: > examples/$(am__dirstamp)
@@ -542,15 +554,16 @@ examples/example$(EXEEXT): $(examples_example_OBJECTS) $(examples_example_DEPEND
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f examples/*.$(OBJEXT)
+	-rm -f output/*.$(OBJEXT)
+	-rm -f output/*.lo
 	-rm -f src/*.$(OBJEXT)
-	-rm -f src/*.lo
 
 distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@examples/$(DEPDIR)/example-example.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/ev3.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/libc_output_la-c_output.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@output/$(DEPDIR)/libc_output_la-c_output.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/libegoev3_a-ev3.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -582,12 +595,26 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 
-src/libc_output_la-c_output.lo: src/c_output.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_libc_output_la_CFLAGS) $(CFLAGS) -MT src/libc_output_la-c_output.lo -MD -MP -MF src/$(DEPDIR)/libc_output_la-c_output.Tpo -c -o src/libc_output_la-c_output.lo `test -f 'src/c_output.c' || echo '$(srcdir)/'`src/c_output.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/libc_output_la-c_output.Tpo src/$(DEPDIR)/libc_output_la-c_output.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/c_output.c' object='src/libc_output_la-c_output.lo' libtool=yes @AMDEPBACKSLASH@
+src/libegoev3_a-ev3.o: src/ev3.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_libegoev3_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/libegoev3_a-ev3.o -MD -MP -MF src/$(DEPDIR)/libegoev3_a-ev3.Tpo -c -o src/libegoev3_a-ev3.o `test -f 'src/ev3.c' || echo '$(srcdir)/'`src/ev3.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/libegoev3_a-ev3.Tpo src/$(DEPDIR)/libegoev3_a-ev3.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/ev3.c' object='src/libegoev3_a-ev3.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_libc_output_la_CFLAGS) $(CFLAGS) -c -o src/libc_output_la-c_output.lo `test -f 'src/c_output.c' || echo '$(srcdir)/'`src/c_output.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_libegoev3_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o src/libegoev3_a-ev3.o `test -f 'src/ev3.c' || echo '$(srcdir)/'`src/ev3.c
+
+src/libegoev3_a-ev3.obj: src/ev3.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_libegoev3_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/libegoev3_a-ev3.obj -MD -MP -MF src/$(DEPDIR)/libegoev3_a-ev3.Tpo -c -o src/libegoev3_a-ev3.obj `if test -f 'src/ev3.c'; then $(CYGPATH_W) 'src/ev3.c'; else $(CYGPATH_W) '$(srcdir)/src/ev3.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/libegoev3_a-ev3.Tpo src/$(DEPDIR)/libegoev3_a-ev3.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/ev3.c' object='src/libegoev3_a-ev3.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_libegoev3_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o src/libegoev3_a-ev3.obj `if test -f 'src/ev3.c'; then $(CYGPATH_W) 'src/ev3.c'; else $(CYGPATH_W) '$(srcdir)/src/ev3.c'; fi`
+
+output/libc_output_la-c_output.lo: output/c_output.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(output_libc_output_la_CPPFLAGS) $(CPPFLAGS) $(output_libc_output_la_CFLAGS) $(CFLAGS) -MT output/libc_output_la-c_output.lo -MD -MP -MF output/$(DEPDIR)/libc_output_la-c_output.Tpo -c -o output/libc_output_la-c_output.lo `test -f 'output/c_output.c' || echo '$(srcdir)/'`output/c_output.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) output/$(DEPDIR)/libc_output_la-c_output.Tpo output/$(DEPDIR)/libc_output_la-c_output.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='output/c_output.c' object='output/libc_output_la-c_output.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(output_libc_output_la_CPPFLAGS) $(CPPFLAGS) $(output_libc_output_la_CFLAGS) $(CFLAGS) -c -o output/libc_output_la-c_output.lo `test -f 'output/c_output.c' || echo '$(srcdir)/'`output/c_output.c
 
 examples/example-example.o: examples/example.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(examples_example_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT examples/example-example.o -MD -MP -MF examples/$(DEPDIR)/example-example.Tpo -c -o examples/example-example.o `test -f 'examples/example.c' || echo '$(srcdir)/'`examples/example.c
@@ -609,7 +636,7 @@ mostlyclean-libtool:
 clean-libtool:
 	-rm -rf .libs _libs
 	-rm -rf examples/.libs examples/_libs
-	-rm -rf src/.libs src/_libs
+	-rm -rf output/.libs output/_libs
 
 distclean-libtool:
 	-rm -f libtool config.lt
@@ -896,6 +923,8 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f examples/$(DEPDIR)/$(am__dirstamp)
 	-rm -f examples/$(am__dirstamp)
+	-rm -f output/$(DEPDIR)/$(am__dirstamp)
+	-rm -f output/$(am__dirstamp)
 	-rm -f src/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/$(am__dirstamp)
 
@@ -910,8 +939,8 @@ clean-am: clean-generic clean-libLIBRARIES clean-libLTLIBRARIES \
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 		-rm -f examples/$(DEPDIR)/example-example.Po
-	-rm -f src/$(DEPDIR)/ev3.Po
-	-rm -f src/$(DEPDIR)/libc_output_la-c_output.Plo
+	-rm -f output/$(DEPDIR)/libc_output_la-c_output.Plo
+	-rm -f src/$(DEPDIR)/libegoev3_a-ev3.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-libtool distclean-tags
@@ -960,8 +989,8 @@ maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
 		-rm -f examples/$(DEPDIR)/example-example.Po
-	-rm -f src/$(DEPDIR)/ev3.Po
-	-rm -f src/$(DEPDIR)/libc_output_la-c_output.Plo
+	-rm -f output/$(DEPDIR)/libc_output_la-c_output.Plo
+	-rm -f src/$(DEPDIR)/libegoev3_a-ev3.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
