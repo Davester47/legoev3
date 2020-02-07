@@ -6,14 +6,16 @@
 #output_libc_output_la_CFLAGS = -DDISABLE_DAISYCHAIN_COM_CALL
 
 lib_LIBRARIES = src/libegoev3.a
-src_libegoev3_a_SOURCES = src/ev3.c src/lms2012.h src/lmstypes.h src/bytecodes.h
+src_libegoev3_a_SOURCES = src/ev3.c src/ev3Out.c src/lms2012.h src/lmstypes.h \
+  src/bytecodes.h
 src_libegoev3_a_CPPFLAGS = -I$(top_srcdir)/include
 
 include_HEADERS = include/ev3.h
-noinst_HEADERS = include/
+noinst_HEADERS = include/ev3Private.h include/lms2012.h include/bytecodes.h \
+  include/lmstypes.h
 
-#noinst_PROGRAMS = examples/example
-#examples_example_SOURCES = examples/example.c
-#examples_example_CPPFLAGS = -I$(top_srcdir)/include
-#examples_example_LDADD = src/libc_output.la src/libegoev3.a
+noinst_PROGRAMS = examples/example
+examples_example_SOURCES = examples/example.c
+examples_example_CPPFLAGS = -I$(top_srcdir)/include
+examples_example_LDADD =  src/libegoev3.a
 #examples_example_LDFLAGS = -rpath /home/root/lms2012/sys/lib

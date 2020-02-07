@@ -1,5 +1,5 @@
 /*
- * libev3 - a simple library for Lego Mindstorms
+ * legoev3 - a simple library for Lego Mindstorms
  * Copyright (C) 2020 David Stumph
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,9 +21,8 @@
 #define LIBEV3_H
 
 int ev3Init(); // Call this before anything else
-void ev3Log(const char* message, ...);
 
-#ifndef EV3_C
+#ifndef EV3_PRIVATE_H
 // Sensor and output device types
 typedef   enum
 {
@@ -65,7 +64,7 @@ typedef   enum
   TYPE_ERROR                    = 127,  //!< Port not empty and type is invalid
 }
 TYPE;
-#endif // EV3_C
+#endif // EV3_PRIVATE_H
 
 // Enums for output ports
 #define OUT_A 1
@@ -75,13 +74,11 @@ TYPE;
 
 // Output Functions
 //void ev3OutSetTypes(char *pTypes);
-void ev3OutSetType(char portNum, TYPE deviceType);
-//unsigned char ev3OutGetBusyFlags(void);
+//void ev3OutSetType(char portNum, TYPE deviceType);
 //void ev3OutSetBusyFlags(unsigned char Flags);
 //void ResetDelayCounter(unsigned char Pattern);
 void ev3OutReset(char ports);
 void ev3OutStop(char ports, char brake);
-//void ev3OutPrgStop(void);
 void ev3OutPower(char ports, char power);
 void ev3OutSpeed(char ports, char speed);
 void ev3OutStart(char ports);

@@ -1,5 +1,5 @@
 /*
- * libev3 - a simple library for Lego Mindstorms
+ * legoev3 - a simple library for Lego Mindstorms
  * Copyright (C) 2020 David Stumph
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,30 +17,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <ev3.h>
-#include <unistd.h>
+#ifndef EV3_PRIVATE_H
+#define EV3_PRIVATE_H
 
-int main() {
-// Always initialise legoev3
-  ev3Init();
+#include "lms2012.h"
+#include "lmstypes.h"
+#include "bytecodes.h"
+#include "ev3.h"
 
-/*  // Start a motor connected to port A and set its speed to 100
-  ev3OutSpeed(OUT_A, 100);
-  ev3OutStart(OUT_A);
+void ev3Log(const char* message, ...);
+int ev3OutInit(void);
+int ev3OutFree(void);
 
-  // Stop the motor after 3 seconds
-  sleep(3);
-  ev3OutStop(OUT_A, 0);*/
 
-  ev3OutStepPower(OUT_A, 100, 180, 360, 180, 1); sleep(3);
-
-  // Output ports can be combined like this:
-  ev3OutSpeed(OUT_A | OUT_B, 50);
-  ev3OutStart(OUT_A | OUT_B);
-  sleep(3);
-  ev3OutStop(OUT_A | OUT_B, 1);
-
-  // Always, always, always free legoev3 when you are done
-  ev3Free();
-  return 0;
-}
+#endif // EV3_PRIVATE_H
