@@ -85,7 +85,7 @@ void ev3OutStart(char ports);
 void ev3OutPolarity(char ports, char pol);
 //void ev3OutRead(char portNum, char* speed, int* steps); is broken and unbuilt
 //void ev3OutTest(void);
-//void ev3OutReady(void); //Not implemented (idk why you would want it)
+void ev3OutReady(char ports, int maxWait);
 void ev3OutStepPower(char ports, char power, int step1, int step2, int step3, char brake);
 void ev3OutTimePower(char ports, char power, int time1, int time2, int time3, char brake);
 void ev3OutStepSpeed(char ports, char speed, int step1, int step2, int step3, char brake);

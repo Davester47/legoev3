@@ -24,15 +24,12 @@ int main() {
 // Always initialise legoev3
   ev3Init();
 
-/*  // Start a motor connected to port A and set its speed to 100
-  ev3OutSpeed(OUT_A, 100);
-  ev3OutStart(OUT_A);
+  // Start a motor connected to port A and set its speed to 100
+  // It will ramp up for 1/2 a turn, spin for 3 turns, and slow down for
+  // 1/2 a turn
 
-  // Stop the motor after 3 seconds
-  sleep(3);
-  ev3OutStop(OUT_A, 0);*/
-
-  ev3OutStepPower(OUT_A, 100, 180, 360, 180, 1); sleep(3);
+  ev3OutStepPower(OUT_A, 100, 180, 360 * 3, 180, 1);
+  ev3OutReady(OUT_A, 10); // Wait for the above operation to complete
 
   // Output ports can be combined like this:
   ev3OutSpeed(OUT_A | OUT_B, 50);

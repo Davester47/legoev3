@@ -24,6 +24,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdbool.h>
+#include <time.h>
 
 MOTORDATA* motordata; // 4 for 4 outputs
 int motorFile = -1;
@@ -103,7 +104,7 @@ void ev3OutTimeSpeed(char ports, char speed, int time1, int time2, int time3, ch
   write(pwmFile, &arg, sizeof(arg));
 }
 
-char checkPorts(char ports) {
+char checkPorts(char ports, char numPorts) {
   char i = 0;
   char num = 0;
   while (i < OUTPUTS) {
@@ -112,21 +113,37 @@ char checkPorts(char ports) {
     }
     i++;
   }
-  if (num == 2) return true;
+  if (num == numPorts) return true;
   else return false;
 }
 // Ports CAN ONLY CONTAIN 2 OUTPUTS! Expect these functions not to work if you
 // give it less or more than two ports.
 void ev3OutStepSync(char ports, char speed, signed short turn, int step, char brake) {
-  if (!checkPorts(ports)) return;
+  if (!checkPorts(ports, 2)) return;
   STEPSYNC arg = {opOUTPUT_STEP_SYNC, ports, speed, turn, step, brake};
   write(pwmFile, &arg, sizeof(arg));
 }
 void ev3OutTimeSync(char ports, char speed, signed short turn, int time, char brake) {
-  if (!checkPorts(ports)) return;
+  if (!checkPorts(ports, 2)) return;
   TIMESYNC arg = {opOUTPUT_TIME_SYNC, ports, speed, turn, time, brake};
   write(pwmFile, &arg, sizeof(arg));
 };
+
+// Waits until the motor is done.
+// If maxWait = 0, it could wait forever, otherwise it could
+// wait maxWait seconds.
+void ev3OutReady(char ports, int maxWait) {
+  unsigned char buffer[4];
+  time_t startTime = time(NULL);
+  do {
+    read(pwmFile, buffer, 4);
+    if (!(buffer[0] & ports)) {
+      break;
+    }
+    usleep(1000); // Sleep for a millisecond and not a resource hog
+  } while (difftime(time(NULL), startTime) <= maxWait || maxWait == 0);
+  return;
+}
 
 int ev3OutFree (void) {
   // Get rid of everything
@@ -142,5 +159,4 @@ int ev3OutFree (void) {
     write(pwmFile, &arg, 1);
     close(pwmFile);
   }
-
 }
