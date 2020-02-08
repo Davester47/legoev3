@@ -37,6 +37,11 @@ int main() {
   sleep(3);
   ev3OutStop(OUT_A | OUT_B, 1);
 
+  // Use this function to read out the current motor position and speed.
+  char speed;
+  int degrees;
+  ev3OutRead(OUT_A, &speed, &degrees);
+
   // Always, always, always free legoev3 when you are done
   ev3Free();
   return 0;

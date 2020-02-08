@@ -19,7 +19,7 @@
 
 #ifndef LIBEV3_H
 #define LIBEV3_H
-
+#include <stdbool.h>
 int ev3Init(); // Call this before anything else
 
 #ifndef EV3_PRIVATE_H
@@ -73,27 +73,23 @@ TYPE;
 #define OUT_D 8
 
 // Output Functions
-//void ev3OutSetTypes(char *pTypes);
-//void ev3OutSetType(char portNum, TYPE deviceType);
-//void ev3OutSetBusyFlags(unsigned char Flags);
-//void ResetDelayCounter(unsigned char Pattern);
+// Must be an array of length 4
+void ev3OutSetAllTypes(TYPE devType[]);
 void ev3OutReset(char ports);
 void ev3OutStop(char ports, char brake);
 void ev3OutPower(char ports, char power);
 void ev3OutSpeed(char ports, char speed);
 void ev3OutStart(char ports);
 void ev3OutPolarity(char ports, char pol);
-//void ev3OutRead(char portNum, char* speed, int* steps); is broken and unbuilt
-//void ev3OutTest(void);
-void ev3OutReady(char ports, int maxWait);
+void ev3OutRead(char portNum, char* speed, int* steps);
+bool ev3OutReady(char ports, int maxWait);
 void ev3OutStepPower(char ports, char power, int step1, int step2, int step3, char brake);
 void ev3OutTimePower(char ports, char power, int time1, int time2, int time3, char brake);
 void ev3OutStepSpeed(char ports, char speed, int step1, int step2, int step3, char brake);
 void ev3OutTimeSpeed(char ports, char speed, int time1, int time2, int time3, char brake);
 void ev3OutStepSync(char ports, char speed, signed short turn, int step, char brake);
 void ev3OutTimeSync(char ports, char speed, signed short turn, int time, char brake);
-//void ev3OutClrCount(void);
-//void ev3OutGetCount(void);
+void ev3OutClrCount(char ports);
 
 int ev3Free(); // Call when you are done with libev3
 

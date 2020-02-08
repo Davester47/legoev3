@@ -113,7 +113,7 @@ char checkPorts(char ports, char numPorts) {
     }
     i++;
   }
-  if (num == numPorts) return true;
+  if (num == numPorts && ports < 16) return true;
   else return false;
 }
 // Ports CAN ONLY CONTAIN 2 OUTPUTS! Expect these functions not to work if you
@@ -130,19 +130,40 @@ void ev3OutTimeSync(char ports, char speed, signed short turn, int time, char br
 };
 
 // Waits until the motor is done.
-// If maxWait = 0, it could wait forever, otherwise it could
-// wait maxWait seconds.
-void ev3OutReady(char ports, int maxWait) {
+// If maxWait = -1, it could wait forever, otherwise it could
+// wait maxWait seconds. If maxWait = 0, it will return the busy state.
+bool ev3OutReady(char ports, int maxWait) {
   unsigned char buffer[4];
   time_t startTime = time(NULL);
+  bool retval = true;
   do {
     read(pwmFile, buffer, 4);
     if (!(buffer[0] & ports)) {
+      retval = true;
       break;
     }
+    retval = false;
     usleep(1000); // Sleep for a millisecond and not a resource hog
-  } while (difftime(time(NULL), startTime) <= maxWait || maxWait == 0);
-  return;
+  } while ((difftime(time(NULL), startTime) <= maxWait || maxWait == 0) && !(maxWait < 0));
+  return retval;
+}
+
+void ev3OutRead(char portNum, char* speed, int* steps) {
+  if (!checkPorts(portNum, 1)) return;
+  portNum >>= 1; // This is for converting the args
+  if (portNum & 0x04) portNum -= 1; // This makes 0x04 into 0x03
+  *speed = motordata[portNum].Speed;// Read out the value from shared memory
+  *steps = motordata[portNum].TachoCounts;
+}
+
+void ev3OutClrCount(char ports) {
+  char args[2] = {opOUTPUT_CLR_COUNT, ports};
+  write(pwmFile, args, 2);
+}
+
+void ev3OutSetAllTypes(TYPE devType[]) {
+  char args[5] = {opOUTPUT_SET_TYPE,devType[0],devType[1],devType[2],devType[3]};
+  write(pwmFile, args, 5);
 }
 
 int ev3OutFree (void) {
