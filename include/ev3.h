@@ -20,6 +20,7 @@
 #ifndef LIBEV3_H
 #define LIBEV3_H
 #include <stdbool.h>
+#include <stdint.h>
 int ev3Init(); // Call this before anything else
 
 #ifndef EV3_PRIVATE_H
@@ -66,11 +67,15 @@ typedef   enum
 TYPE;
 #endif // EV3_PRIVATE_H
 
-// Enums for output ports
+// Enums for all ports
 #define OUT_A 1
 #define OUT_B 2
 #define OUT_C 4
 #define OUT_D 8
+#define IN_1 0
+#define IN_2 1
+#define IN_3 2
+#define IN_4 3
 
 // Output Functions
 // Must be an array of length 4
@@ -90,6 +95,9 @@ void ev3OutTimeSpeed(char ports, char speed, int time1, int time2, int time3, ch
 void ev3OutStepSync(char ports, char speed, signed short turn, int step, char brake);
 void ev3OutTimeSync(char ports, char speed, signed short turn, int time, char brake);
 void ev3OutClrCount(char ports);
+
+// Start of the input functions
+int16_t ev3InReadAnalogRaw(int8_t portNum);
 
 int ev3Free(); // Call when you are done with libev3
 

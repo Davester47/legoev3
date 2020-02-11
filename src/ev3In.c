@@ -17,25 +17,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef EV3_PRIVATE_H
-#define EV3_PRIVATE_H
+#include <ev3Private.h>
 
-#include "lms2012.h"
-#include "lmstypes.h"
-#include "bytecodes.h"
-#include "ev3.h"
-#include <stdint.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <stdbool.h>
+int analogFile = -1;
+ANALOG* analog = MAP_FAILED;
 
-void ev3Log(const char* message, ...);
-int8_t ev3OutInit(void);
-int8_t ev3OutFree(void);
-int8_t ev3InInit(void);
-int8_t ev3InFree(void);
+int8_t ev3InInit(void) {
+  analogFile = open(ANALOG_DEVICE_NAME, O_RDWR);
+  if (analogFile < 0) {
+    ev3InFree();
+  }
 
-#endif // EV3_PRIVATE_H
+  analog = mmap(NULL, sizeof(ANALOG), PROT_READ | PROT_WRITE, MAP_SHARED, analogFile, 0);
+  close(analogFile); // Mappings persist after their files are closed
+  analogFile = -1;
+  if (analog == MAP_FAILED) {
+    ev3InFree();
+    return 0;
+  }
+  return 1; // It's the same as true
+}
+
+int16_t ev3InReadAnalogRaw(int8_t portNum) {
+  // right shift to make the value for unpressed "fall off"
+  return (*analog).Pin6[portNum][(*analog).LogIn[portNum]] >> 8;
+}
+
+int8_t ev3InFree(void) {
+  if (analog != MAP_FAILED) {
+    munmap(analog, sizeof(ANALOG));
+  }
+  return 1; // Equivalent to true
+}

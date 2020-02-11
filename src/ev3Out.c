@@ -18,12 +18,6 @@
  */
 
 #include "ev3Private.h"
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <stdbool.h>
 #include <time.h>
 
 MOTORDATA* motordata; // 4 for 4 outputs
@@ -31,7 +25,7 @@ int motorFile = -1;
 int pwmFile = -1;
 
 
-int ev3OutInit (void) {
+int8_t ev3OutInit (void) {
   // initialize the kernel driver interface
   motorFile = open(MOTOR_DEVICE_NAME, O_RDWR);
   pwmFile = open(PWM_DEVICE_NAME, O_RDWR);
@@ -39,19 +33,20 @@ int ev3OutInit (void) {
   if (!(motorFile >= 0 && pwmFile >= 0)) {
     // something went wrong
     ev3Log("Error opening files!\n");
-    ev3OutFree();
+    return 0;
   }
   // Map the MOTORDATA structure
   motordata = (MOTORDATA*) mmap(NULL, sizeof(MOTORDATA) * OUTPUTS, PROT_READ | PROT_WRITE,
-                   MAP_FILE | MAP_SHARED, motorFile, 0);
+               MAP_FILE | MAP_SHARED, motorFile, 0);
   if (motordata == MAP_FAILED) {
     // Something went wrong
     ev3Log("Error mapping %s\n", MOTOR_DEVICE_NAME);
-    ev3OutFree();
+    return 0;
   }
   // Send the program start opcode
   char programStart = opPROGRAM_START;
   write(pwmFile, &programStart, 1);
+  return 1;
 }
 
 void ev3OutStart(char ports) {
@@ -166,7 +161,7 @@ void ev3OutSetAllTypes(TYPE devType[]) {
   write(pwmFile, args, 5);
 }
 
-int ev3OutFree (void) {
+int8_t ev3OutFree (void) {
   // Get rid of everything
   // Only close the files IF they were opened earlier.
   if (motorFile >= 0) {
@@ -180,4 +175,5 @@ int ev3OutFree (void) {
     write(pwmFile, &arg, 1);
     close(pwmFile);
   }
+  return 1;
 }

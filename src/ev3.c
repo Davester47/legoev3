@@ -34,11 +34,16 @@ void ev3Log(const char* message, ...) {
 }
 
 int ev3Init() {
-  ev3OutInit();
+  if (!ev3OutInit() || !ev3InInit()) {
+    ev3OutFree(); // Call ev3OutFree to clear anything that may have been allocated
+    ev3Log("Error initializing library!\n");
+    return 0;
+  }
   return 1;
 }
 
 int ev3Free() {
+  ev3InFree();
   ev3OutFree();
   return 1;
 }
