@@ -1,4 +1,4 @@
-AC_INIT([legoev3], [0.1A], [github.com/Davester47/legoev3])
+AC_INIT([legoev3], [0.1A], [https://github.com/Davester47/legoev3/issues], [], [https://github.com/Davester47/legoev3])
 AM_INIT_AUTOMAKE([subdir-objects -Wall -Werror foreign])
 AC_PROG_CC
 AC_PROG_RANLIB
