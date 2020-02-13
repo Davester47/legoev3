@@ -14,13 +14,6 @@
 
 @SET_MAKE@
 
-#lib_LTLIBRARIES = output/libc_output.la
-#output_libc_output_la_LDFLAGS = -avoid-version
-#output_libc_output_la_SOURCES = output/c_output.c src/c_output.h src/lms2012.h
-#output_libc_output_la_SOURCES += src/lmstypes.h src/bytecodes.h
-#output_libc_output_la_CPPFLAGS = -I$(top_srcdir)/include
-#output_libc_output_la_CFLAGS = -DDISABLE_DAISYCHAIN_COM_CALL
-
 
 
 VPATH = @srcdir@
@@ -934,7 +927,6 @@ uninstall-am: uninstall-includeHEADERS uninstall-libLIBRARIES
 
 .PRECIOUS: Makefile
 
-#examples_example_LDFLAGS = -rpath /home/root/lms2012/sys/lib
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

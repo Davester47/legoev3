@@ -65,6 +65,26 @@ typedef   enum
   TYPE_ERROR                    = 127,  //!< Port not empty and type is invalid
 }
 TYPE;
+typedef   enum
+{
+  CONN_UNKNOWN                  = 111,  //!< Connection is fake (test)
+
+  CONN_DAISYCHAIN               = 117,  //!< Connection is daisy chained
+  CONN_NXT_COLOR                = 118,  //!< Connection type is NXT color sensor
+  CONN_NXT_DUMB                 = 119,  //!< Connection type is NXT analog sensor
+  CONN_NXT_IIC                  = 120,  //!< Connection type is NXT IIC sensor
+
+  CONN_INPUT_DUMB               = 121,  //!< Connection type is LMS2012 input device with ID resistor
+  CONN_INPUT_UART               = 122,  //!< Connection type is LMS2012 UART sensor
+
+  CONN_OUTPUT_DUMB              = 123,  //!< Connection type is LMS2012 output device with ID resistor
+  CONN_OUTPUT_INTELLIGENT       = 124,  //!< Connection type is LMS2012 output device with communication
+  CONN_OUTPUT_TACHO             = 125,  //!< Connection type is LMS2012 tacho motor with series ID resistance
+
+  CONN_NONE                     = 126,  //!< Port empty or not available
+  CONN_ERROR                    = 127,  //!< Port not empty and type is invalid
+}
+CONN;
 #endif // EV3_PRIVATE_H
 
 // Enums for all ports
@@ -72,10 +92,10 @@ TYPE;
 #define OUT_B 2
 #define OUT_C 4
 #define OUT_D 8
-#define IN_1 0
-#define IN_2 1
-#define IN_3 2
-#define IN_4 3
+#define IN_1 16
+#define IN_2 17
+#define IN_3 18
+#define IN_4 19
 
 // Output Functions
 // Must be an array of length 4
@@ -98,6 +118,8 @@ void ev3OutClrCount(char ports);
 
 // Start of the input functions
 int16_t ev3InReadAnalogRaw(int8_t portNum);
+TYPE ev3InGetType(int8_t portNum);
+CONN ev3InGetConn(int8_t portNum);
 
 int ev3Free(); // Call when you are done with libev3
 

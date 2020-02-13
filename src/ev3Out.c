@@ -37,7 +37,7 @@ int8_t ev3OutInit (void) {
   }
   // Map the MOTORDATA structure
   motordata = (MOTORDATA*) mmap(NULL, sizeof(MOTORDATA) * OUTPUTS, PROT_READ | PROT_WRITE,
-               MAP_FILE | MAP_SHARED, motorFile, 0);
+               MAP_SHARED, motorFile, 0);
   if (motordata == MAP_FAILED) {
     // Something went wrong
     ev3Log("Error mapping %s\n", MOTOR_DEVICE_NAME);
