@@ -38,7 +38,7 @@ int main() {
   sleep(3);
   ev3OutStop(OUT_A | OUT_B, 1);
   ev3OutReady(OUT_A | OUT_B, 10);
-
+/*
   // Find the first port with a touch sensor:
   int8_t touchPort = IN_1;
   while(touchPort <= IN_4) {
@@ -63,7 +63,9 @@ int main() {
       state = value;
     }
     usleep(1000 * 100); // sleep for a 1/10th of a second
-  }
+  }*/
+  ev3InSetMode(IN_2, 2);
+  sleep(3);
 
   // Always, always, always free legoev3 when you are done
   ev3Free();

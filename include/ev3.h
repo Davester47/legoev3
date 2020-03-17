@@ -120,6 +120,8 @@ void ev3OutClrCount(char ports);
 int16_t ev3InReadAnalogRaw(int8_t portNum);
 TYPE ev3InGetType(int8_t portNum);
 CONN ev3InGetConn(int8_t portNum);
+int8_t* ev3InReadUartRaw(int8_t portNum);
+int8_t ev3InSetMode(int8_t portNum, int8_t mode);
 
 int ev3Free(); // Call when you are done with libev3
 

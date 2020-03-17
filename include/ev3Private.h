@@ -30,6 +30,7 @@
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/ioctl.h>
 #include <stdbool.h>
 
 void ev3Log(const char* message, ...);
@@ -37,5 +38,6 @@ int8_t ev3OutInit(void);
 int8_t ev3OutFree(void);
 int8_t ev3InInit(void);
 int8_t ev3InFree(void);
+void ev3InUpdateDevCon(void);
 
 #endif // EV3_PRIVATE_H
