@@ -85,6 +85,14 @@ int8_t ev3InSetMode(int8_t portNum, int8_t mode) {
   // This function works by sending a modified DEVCON to d_uart
   ev3InUpdateDevCon();
   devcon.Mode[portNum] = mode;
+  // Make a new devcon so we don't destroy the connection values
+  DEVCON newdev = devcon;
+  int i = 0;
+  while (i < INPUTS) {
+    if (i != portNum)
+      newdev.Connection[i] = CONN_ERROR;
+    i++;
+  }
   ioctl(uartFile, UART_SET_CONN, &devcon);
 }
 
@@ -92,18 +100,11 @@ int8_t ev3InSetMode(int8_t portNum, int8_t mode) {
 void ev3InUpdateDevCon(void) {
   // d_uart doesn't need the TypeData parameter, so we don't fill it.
   int i = 0;
-  UARTCTL uctl;
   while (i < 4) {
     // Repeat once for every input port
     devcon.Connection[i] = ev3InGetConn(i+16);
-    if (devcon.Connection[i] == CONN_INPUT_UART) {
-      // Ask the driver what the current mode is
-      uctl.Port = i;
-      uctl.Mode = 0; // d_uart won't update this either
-      ioctl(uartFile, UART_READ_MODE_INFO, &uctl);
-      // Now uctl.TypeData has what we need, but not uctl.Mode
-      devcon.Mode[i] = uctl.TypeData.Mode;
-    }
+    devcon.Type[i] = ev3InGetType(i+16);
+    // AFAIK, there is now way to read the port mode.
     i++;
   }
 }
@@ -116,9 +117,62 @@ int16_t ev3InReadAnalogRaw(int8_t portNum) {
 }
 
 // This function assumes that it IS a uart sensor
-int8_t* ev3InReadUartRaw(int8_t portNum) {
+void* ev3InReadUartRaw(int8_t portNum) {
   portNum -= 16;
-  return uart->Raw[portNum][uart->LogIn[portNum]];
+  return uart->Raw[portNum][uart->Actual[portNum]];
+}
+
+// The user of the library can use this function to read sensor values
+int32_t ev3InRead(int8_t portNum) {
+  portNum -= 16;
+  int8_t* uartdata;
+  TYPE type = ev3InGetType(portNum+16);
+  int8_t bits = 0;
+  switch (ev3InGetConn(portNum+16)) {
+    case CONN_INPUT_UART: // Gyro, color, ir, us
+      // Read the data
+      uartdata = ev3InReadUartRaw(portNum+16);
+      // Figure out if its 8 bit or 16-bit
+      // I got all this from typedata.rcf
+      if (type == TYPE_COLOR) {
+        switch (devcon.Mode[portNum]) {
+          case 0:
+          case 1:
+          case 2:
+            bits = 8;
+            break;
+          default:
+            bits = 16;
+            break;
+        }
+      } else if (type == TYPE_ULTRASONIC) {
+        if (devcon.Mode[portNum] == 2) {
+          bits = 8;
+        } else
+          bits = 16;
+      } else if (type == TYPE_GYRO) {
+        bits = 16;
+      } else if (type == TYPE_IR) {
+        if (devcon.Mode[portNum] == 3 || devcon.Mode[portNum] == 5) {
+          bits = 8;
+        } else
+          bits = 16;
+      }
+
+      if (bits == 8) {
+        int8_t data = *((int8_t*)uartdata);
+        return (int32_t)data;
+      } else if (bits == 16) {
+        int16_t data = *((int16_t*)uartdata);
+        return (int32_t)data;
+      } else {
+        return 0;
+      }
+      break;
+    case CONN_INPUT_DUMB:
+      return (int32_t)ev3InReadAnalogRaw(portNum+16);
+      break;
+  }
 }
 
 // For some reason, device type data comes from d_analog.c
@@ -126,10 +180,19 @@ TYPE ev3InGetType(int8_t portNum) {
   if (portNum == IN_1 || portNum == IN_2 || portNum == IN_3 || portNum == IN_4) { 
     // It's an input port
     int8_t newPort = portNum - 16; // see line 32
+    CONN conn = ev3InGetConn(portNum);
     TYPE t = (TYPE)(*analog).InDcm[newPort];
-    if ((ev3InGetConn(portNum) == CONN_INPUT_DUMB) && t == TYPE_UNKNOWN) {
+    if ((conn == CONN_INPUT_DUMB) && t == TYPE_UNKNOWN) {
       // touch sensor
       return TYPE_TOUCH;
+    } else if (conn = CONN_INPUT_UART) {
+      // Any of gyro, color, ultrasonic, or ir
+      // Ask the driver about the type
+      UARTCTL uctl;
+      uctl.Mode = 0;
+      uctl.Port = newPort;
+      ioctl(uartFile, UART_READ_MODE_INFO, &uctl);
+      return uctl.TypeData.Type;
     } else
       return t;
   } else if (portNum == OUT_A || portNum == OUT_B || portNum == OUT_C || portNum == OUT_D){

@@ -19,7 +19,6 @@
 
 #include <ev3.h>
 #include <unistd.h>
-#include <time.h>
 
 int main() {
 // Always initialise legoev3
@@ -38,34 +37,11 @@ int main() {
   sleep(3);
   ev3OutStop(OUT_A | OUT_B, 1);
   ev3OutReady(OUT_A | OUT_B, 10);
-/*
-  // Find the first port with a touch sensor:
-  int8_t touchPort = IN_1;
-  while(touchPort <= IN_4) {
-    if (ev3InGetType(touchPort) == TYPE_TOUCH) {
-      break;
-    }
-    touchPort++;
-  }
 
-  // Loop for 10 seconds and go while the touch sensor is pressed
-  // For some reason this is incredibly laggy, and I don't know why.
-  time_t startTime = time(NULL);
-  int state = 0;
-  while (difftime(time(NULL), startTime) <= 10) {
-    int16_t value = ev3InReadAnalogRaw(touchPort);
-    if (value && value != state) {
-      ev3OutSpeed(OUT_A, 100);
-      ev3OutStart(OUT_A);
-      state = value;
-    } else if (value != state) {
-      ev3OutStop(OUT_A, 1);
-      state = value;
-    }
-    usleep(1000 * 100); // sleep for a 1/10th of a second
-  }*/
+  // Read from the color sensor on port 2
   ev3InSetMode(IN_2, 2);
-  sleep(3);
+  sleep(1); // If you don't wait a little bit after changing modes, you get garbage
+  int32_t color = ev3InRead(IN_2);
 
   // Always, always, always free legoev3 when you are done
   ev3Free();

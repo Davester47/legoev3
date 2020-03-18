@@ -1540,7 +1540,8 @@ typedef   enum
   GREENCOLOR   = 3,
   YELLOWCOLOR  = 4,
   REDCOLOR     = 5,
-  WHITECOLOR   = 6
+  WHITECOLOR   = 6,
+  BROWNCOLOR   = 7
 }
 NXTCOLOR;
 
