@@ -41,4 +41,4 @@ an interface to the kernel drivers that are built into the firmware. This librar
 
 ### Coming Soon:
 
-Input and sensor support is in the works.
+Sound support is next.
