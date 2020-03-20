@@ -1,5 +1,5 @@
 lib_LIBRARIES = src/libegoev3.a
-src_libegoev3_a_SOURCES = src/ev3.c src/ev3Out.c src/ev3In.c
+src_libegoev3_a_SOURCES = src/ev3.c src/ev3Out.c src/ev3In.c src/ev3Btn.c
 src_libegoev3_a_CPPFLAGS = -I$(top_srcdir)/include
 
 include_HEADERS = include/ev3.h

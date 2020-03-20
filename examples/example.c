@@ -1,5 +1,5 @@
 /*
- * libev3 - a simple library for Lego Mindstorms
+ * legoev3 - a simple library for Lego Mindstorms
  * Copyright (C) 2020 David Stumph
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,10 +24,15 @@ int main() {
 // Always initialise legoev3
   ev3Init();
 
+  // Turn the blinking LEDs orange if the back button is pressed
+  sleep(1); // Just to give you a chance to press the button :)
+  if (ev3BtnRead(BACK_BUTTON)) {
+    ev3SetLEDPattern(LED_ORANGE_FLASH);
+  }
+
   // Start a motor connected to port A and set its speed to 100
   // It will ramp up for 1/2 a turn, spin for 3 turns, and slow down for
   // 1/2 a turn
-
   ev3OutStepPower(OUT_A, 100, 180, 360 * 3, 180, 1);
   ev3OutReady(OUT_A, 10); // Wait for the above operation to complete
 

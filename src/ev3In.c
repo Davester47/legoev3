@@ -37,7 +37,6 @@ int8_t ev3InInit(void) {
   dcmFile = open(DCM_DEVICE_NAME, O_RDWR);           // in lms2012.h
   uartFile = open(UART_DEVICE_NAME, O_RDWR);         //
   if (analogFile < 0 || dcmFile < 0 || uartFile < 0) {
-    ev3InFree();
     return 0;
   }
 
@@ -47,7 +46,6 @@ int8_t ev3InInit(void) {
   uart = mmap(NULL, sizeof(UART), PROT_READ | PROT_WRITE, MAP_SHARED, uartFile, 0);
   // Don't close the uart file, because it is used later
   if (analog == MAP_FAILED || uart == MAP_FAILED) {
-    ev3InFree();
     return 0;
   }
 
@@ -217,7 +215,7 @@ CONN ev3InGetConn(int8_t portNum) {
     return CONN_ERROR; // user didn't specify a valid port
 }
 
-int8_t ev3InFree(void) {
+void ev3InFree(void) {
   if (analog != MAP_FAILED) {
     munmap(analog, sizeof(ANALOG));
   }
@@ -232,5 +230,4 @@ int8_t ev3InFree(void) {
     close(dcmFile);
     dcmFile = -1;
   }
-  return 1; // Equivalent to true
 }

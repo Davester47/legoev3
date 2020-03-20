@@ -96,6 +96,36 @@ typedef   enum
   BROWNCOLOR   = 7
 }
 NXTCOLOR;
+typedef   enum
+{
+  LED_BLACK                     = 0,
+  LED_GREEN                     = 1,
+  LED_RED                       = 2,
+  LED_ORANGE                    = 3,
+  LED_GREEN_FLASH               = 4,
+  LED_RED_FLASH                 = 5,
+  LED_ORANGE_FLASH              = 6,
+  LED_GREEN_PULSE               = 7,
+  LED_RED_PULSE                 = 8,
+  LED_ORANGE_PULSE              = 9,
+
+  LEDPATTERNS
+}
+LEDPATTERN;
+typedef   enum
+{
+  NO_BUTTON                     = 0,
+  UP_BUTTON                     = 1,
+  ENTER_BUTTON                  = 2,
+  DOWN_BUTTON                   = 3,
+  RIGHT_BUTTON                  = 4,
+  LEFT_BUTTON                   = 5,
+  BACK_BUTTON                   = 6,
+  ANY_BUTTON                    = 7,
+
+  BUTTONTYPES                   = 8
+}
+BUTTONTYPE;
 #endif // EV3_PRIVATE_H
 
 // Enums for all ports
@@ -108,7 +138,7 @@ NXTCOLOR;
 #define IN_3 18
 #define IN_4 19
 
-// Output Functions
+// Functions defined in ev3Out.c
 // Must be an array of length 4
 void ev3OutSetAllTypes(TYPE devType[]);
 void ev3OutReset(char ports);
@@ -127,13 +157,17 @@ void ev3OutStepSync(char ports, char speed, signed short turn, int step, char br
 void ev3OutTimeSync(char ports, char speed, signed short turn, int time, char brake);
 void ev3OutClrCount(char ports);
 
-// Start of the input functions
+// Functions defined in ev3In.c
 int16_t ev3InReadAnalogRaw(int8_t portNum);
 TYPE ev3InGetType(int8_t portNum);
 CONN ev3InGetConn(int8_t portNum);
 void* ev3InReadUartRaw(int8_t portNum);
 int8_t ev3InSetMode(int8_t portNum, int8_t mode);
 int32_t ev3InRead(int8_t portNum);
+
+// Functions defined in ev3Btn.c
+void ev3SetLEDPattern(int8_t pattern);
+int8_t ev3BtnRead(int8_t button);
 
 int ev3Free(); // Call when you are done with libev3
 

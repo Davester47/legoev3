@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <ev3Private.h>
 
+#ifdef DEBUG
 void ev3Log(const char* message, ...) {
   va_list vl;
   va_start(vl, message);
@@ -32,11 +33,14 @@ void ev3Log(const char* message, ...) {
   fclose(pFile);
   va_end(vl);
 }
+#endif // DEBUG
 
 int ev3Init() {
-  if (!ev3OutInit() || !ev3InInit()) {
+  if (!ev3OutInit() || !ev3InInit() || !ev3BtnInit()) {
     ev3Free(); // Call ev3Free to clear anything that may have been allocated
+#ifdef DEBUG
     ev3Log("Error initializing library!\n");
+#endif // DEBUG
     return 0;
   }
   return 1;
@@ -45,5 +49,6 @@ int ev3Init() {
 int ev3Free() {
   ev3InFree();
   ev3OutFree();
+  ev3BtnFree();
   return 1;
 }

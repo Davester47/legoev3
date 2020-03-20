@@ -33,11 +33,15 @@
 #include <sys/ioctl.h>
 #include <stdbool.h>
 
+#ifdef DEBUG
 void ev3Log(const char* message, ...);
+#endif // DEBUG
 int8_t ev3OutInit(void);
-int8_t ev3OutFree(void);
+void   ev3OutFree(void);
+int8_t ev3BtnInit(void);
+void   ev3BtnFree(void);
 int8_t ev3InInit(void);
-int8_t ev3InFree(void);
+void   ev3InFree(void);
 void ev3InUpdateDevCon(void);
 
 #endif // EV3_PRIVATE_H

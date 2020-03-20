@@ -32,7 +32,9 @@ int8_t ev3OutInit (void) {
 
   if (!(motorFile >= 0 && pwmFile >= 0)) {
     // something went wrong
+#ifdef DEBUG
     ev3Log("Error opening files!\n");
+#endif // DEBUG
     return 0;
   }
   // Map the MOTORDATA structure
@@ -40,7 +42,9 @@ int8_t ev3OutInit (void) {
                MAP_SHARED, motorFile, 0);
   if (motordata == MAP_FAILED) {
     // Something went wrong
+#ifdef DEBUG
     ev3Log("Error mapping %s\n", MOTOR_DEVICE_NAME);
+#endif // DEBUG
     return 0;
   }
   // Send the program start opcode
@@ -161,7 +165,7 @@ void ev3OutSetAllTypes(TYPE devType[]) {
   write(pwmFile, args, 5);
 }
 
-int8_t ev3OutFree (void) {
+void ev3OutFree (void) {
   // Get rid of everything
   // Only close the files IF they were opened earlier.
   if (motorFile >= 0) {
@@ -169,11 +173,12 @@ int8_t ev3OutFree (void) {
       munmap(motordata, sizeof(MOTORDATA) * OUTPUTS);
     }
     close(motorFile);
+    motorFile = -1;
   }
   if (pwmFile >= 0) {
     char arg = opPROGRAM_STOP;
     write(pwmFile, &arg, 1);
     close(pwmFile);
+    pwmFile = -1;
   }
-  return 1;
 }
