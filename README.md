@@ -39,6 +39,15 @@ To link against legoev3, use `-legoev3`. You will need to upload your program to
 Legoev3 doesn't actually contain any code that controls the motors. It provides
 an interface to the kernel drivers that are built into the firmware. This library used to use the built-in libraries that interface to the drivers, but they way had too many dependencies. The libraries all needed each other, and the needed libusb which needed udev, and et cetera.
 
-### Coming Soon:
+### To do list (not necessarily in this order):
 
-Sound support is next.
+- [x] Motors
+- [x] Sensors
+- [x] Buttons
+- [x] LED Patterns
+- [ ] Sound
+- [ ] LCD
+- [ ] Bluetooth
+- [ ] WiFi
+- [ ] A higher level API
+- [ ] Real documentation :)
