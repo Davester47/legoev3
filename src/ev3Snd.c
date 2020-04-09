@@ -46,5 +46,6 @@ void ev3SndFree() {
 
   if (snd != MAP_FAILED) {
     munmap(snd, sizeof(SOUND));
+    snd = MAP_FAILED;
   }
 }

@@ -171,6 +171,7 @@ void ev3OutFree (void) {
   if (motorFile >= 0) {
     if (motordata != MAP_FAILED) {
       munmap(motordata, sizeof(MOTORDATA) * OUTPUTS);
+      motordata = MAP_FAILED;
     }
     close(motorFile);
     motorFile = -1;

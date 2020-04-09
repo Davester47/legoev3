@@ -218,9 +218,11 @@ CONN ev3InGetConn(int8_t portNum) {
 void ev3InFree(void) {
   if (analog != MAP_FAILED) {
     munmap(analog, sizeof(ANALOG));
+    analog = MAP_FAILED;
   }
   if (uart != MAP_FAILED) {
     munmap(uart, sizeof(UART));
+    uart = MAP_FAILED;
   }
   if (uartFile >= 0) {
     close(uartFile);

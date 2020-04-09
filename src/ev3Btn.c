@@ -63,5 +63,6 @@ void ev3BtnFree() {
   }
   if (ui != MAP_FAILED) {
     munmap(ui, sizeof(UI));
+    ui = MAP_FAILED;
   }
 }
