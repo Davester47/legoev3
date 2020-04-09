@@ -17,39 +17,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
-#include <stddef.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdlib.h>
 #include <ev3Private.h>
 
-#ifdef DEBUG
-void ev3Log(const char* message, ...) {
-  va_list vl;
-  va_start(vl, message);
-  FILE* pFile = fopen("/home/root/lms2012/prjs/test/log", "a");
-  vfprintf(pFile, message, vl);
-  fclose(pFile);
-  va_end(vl);
-}
-#endif // DEBUG
+SOUND* snd = MAP_FAILED;
+int sndFile = -1;
 
-int ev3Init() {
-  if (!ev3OutInit() || !ev3InInit() || !ev3BtnInit() || !ev3SndInit()) {
-    ev3Free(); // Call ev3Free to clear anything that may have been allocated
-#ifdef DEBUG
-    ev3Log("Error initializing library!\n");
-#endif // DEBUG
-    return 0;
+int8_t ev3SndInit() {
+  // Open the file
+  sndFile = open(SOUND_DEVICE_NAME, O_RDWR);
+  if (sndFile < 0) {
+    return 0; // Opening the file failed
+  }
+  
+  // Map shared memory
+  snd = mmap(NULL, sizeof(SOUND), PROT_READ | PROT_WRITE, MAP_SHARED, sndFile, 0);
+  if (snd == MAP_FAILED) {
+    return 0; // ev3SndFree is called to close the file
   }
   return 1;
 }
 
-int ev3Free() {
-  ev3InFree();
-  ev3OutFree();
-  ev3BtnFree();
-  ev3SndInit();
-  return 1;
+void ev3SndFree() {
+  // Only munmap and close if they were opened earlier
+  if (sndFile >= 0) {
+    close(sndFile);
+    sndFile = -1; // In case this gets called again
+  }
+
+  if (snd != MAP_FAILED) {
+    munmap(snd, sizeof(SOUND));
+  }
 }

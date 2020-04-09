@@ -42,6 +42,8 @@ int8_t ev3BtnInit(void);
 void   ev3BtnFree(void);
 int8_t ev3InInit(void);
 void   ev3InFree(void);
+int8_t ev3SndInit();
+void   ev3SndFree();
 void ev3InUpdateDevCon(void);
 
 #endif // EV3_PRIVATE_H
