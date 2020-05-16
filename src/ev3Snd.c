@@ -37,6 +37,24 @@ int8_t ev3SndInit() {
   return 1;
 }
 
+
+// Waits until current sound is done.
+// Waits forever if maxWait is <0,
+// Returns busy state immediately if maxWait is 0, or
+// waits at most maxWait seconds for it to be done
+int8_t ev3SndReady(int maxWait) {
+  time_t startTime = time(NULL);
+  while ((diffTime(startTime, time(NULL)) < maxWait || maxWait < 0) && maxWait) {
+    if (!snd->Status == BUSY) {
+      return true;
+    }
+    usleep(1000);
+  }
+  if (snd->Status == BUSY) {
+    return false;
+  }
+}
+
 void ev3SndFree() {
   // Only munmap and close if they were opened earlier
   if (sndFile >= 0) {
