@@ -21,6 +21,8 @@
 #define LIBEV3_H
 #include <stdbool.h>
 #include <stdint.h>
+#include <pitches.h>
+
 int ev3Init(); // Call this before anything else
 
 #ifndef EV3_PRIVATE_H
@@ -168,6 +170,10 @@ int32_t ev3InRead(int8_t portNum);
 // Functions defined in ev3Btn.c
 void ev3SetLEDPattern(int8_t pattern);
 int8_t ev3BtnRead(int8_t button);
+
+// Functions defined in ev3Snd.c
+int8_t ev3SndReady(int maxWait);
+void ev3SndTone(uint16_t hertz, uint16_t msecs, uint8_t level);
 
 int ev3Free(); // Call when you are done with libev3
 
