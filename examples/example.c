@@ -24,8 +24,12 @@ int main() {
 // Always initialise legoev3
   ev3Init();
 
+  // Play a tone at 500 Hz for half of a second
+  ev3SndTone(500, 500, 100); // Does not block.
+  // If you want to wait until the end of a sound, use this:
+  ev3SndReady(-1);
+
   // Turn the blinking LEDs orange if the back button is pressed
-  sleep(1); // Just to give you a chance to press the button :)
   if (ev3BtnRead(BACK_BUTTON)) {
     ev3SetLEDPattern(LED_ORANGE_FLASH);
   }
