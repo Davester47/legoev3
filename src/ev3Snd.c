@@ -44,7 +44,7 @@ int8_t ev3SndInit() {
 // waits at most maxWait seconds for it to be done
 int8_t ev3SndReady(int maxWait) {
   time_t startTime = time(NULL);
-  while ((diffTime(startTime, time(NULL)) < maxWait || maxWait < 0) && maxWait) {
+  while ((difftime(startTime, time(NULL)) < maxWait || maxWait < 0) && maxWait) {
     if (!snd->Status == BUSY) {
       return true;
     }
@@ -53,6 +53,22 @@ int8_t ev3SndReady(int maxWait) {
   if (snd->Status == BUSY) {
     return false;
   }
+}
+
+// Plays a sound between 250 and 10,000 hertz for msecs long
+// level can be 0-100
+void ev3SndTone(uint16_t hertz, uint16_t msecs, uint8_t level) {
+  // See d_sound.c:633-668 in the lms source release for message structure
+  uint8_t buffer[6] = {
+    TONE,
+    level,
+    hertz & 0x00FF,
+    hertz >> 8,
+    msecs & 0x00FF,
+    msecs >> 8
+  };
+  snd->Status = BUSY; // The driver won't do it automatically
+  write(sndFile, buffer, 6);
 }
 
 void ev3SndFree() {
