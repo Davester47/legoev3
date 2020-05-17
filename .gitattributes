@@ -4,7 +4,9 @@
 aclocal.m4 linguist-vendored
 ar-lib linguist-vendored
 compile linguist-vendored
-config* linguist-vendored
+configure linguist-vendored
+config.guess linguist-vendored
+*.sub linguist-vendored
 depcomp linguist-vendored
 *.in linguist-vendored
 install-sh linguist-vendored
