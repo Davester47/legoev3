@@ -18,7 +18,6 @@
  */
 
 #include "ev3Private.h"
-#include <time.h>
 
 MOTORDATA* motordata; // 4 for 4 outputs
 int motorFile = -1;

@@ -32,6 +32,7 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <stdbool.h>
+#include <time.h>
 
 #ifdef DEBUG
 void ev3Log(const char* message, ...);
