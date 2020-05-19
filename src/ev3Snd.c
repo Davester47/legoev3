@@ -71,6 +71,12 @@ void ev3SndTone(uint16_t hertz, uint16_t msecs, uint8_t level) {
   write(sndFile, buffer, 6);
 }
 
+void ev3SndStop(void) {
+  uint8_t buffer[1] = {BREAK};
+  write(sndFile, buffer, 1);
+  // The driver automatically sets snd->Status to OK
+}
+
 void ev3SndFree() {
   // Only munmap and close if they were opened earlier
   if (sndFile >= 0) {

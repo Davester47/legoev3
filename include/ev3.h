@@ -174,6 +174,7 @@ int8_t ev3BtnRead(int8_t button);
 // Functions defined in ev3Snd.c
 int8_t ev3SndReady(int maxWait);
 void ev3SndTone(uint16_t hertz, uint16_t msecs, uint8_t level);
+void ev3SndStop(void);
 
 int ev3Free(); // Call when you are done with libev3
 
