@@ -149,7 +149,7 @@ void ev3OutPower(char ports, char power);
 void ev3OutSpeed(char ports, char speed);
 void ev3OutStart(char ports);
 void ev3OutPolarity(char ports, char pol);
-void ev3OutRead(char portNum, char* speed, int* steps);
+void ev3OutRead(int8_t portNum, char* speed, int* steps);
 bool ev3OutReady(char ports, int maxWait);
 void ev3OutStepPower(char ports, char power, int step1, int step2, int step3, char brake);
 void ev3OutTimePower(char ports, char power, int time1, int time2, int time3, char brake);

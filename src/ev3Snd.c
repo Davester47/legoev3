@@ -45,14 +45,15 @@ int8_t ev3SndInit() {
 int8_t ev3SndReady(int maxWait) {
   time_t startTime = time(NULL);
   while ((difftime(startTime, time(NULL)) < maxWait || maxWait < 0) && maxWait) {
-    if (!snd->Status == BUSY) {
+    if (snd->Status != BUSY) {
       return true;
     }
     usleep(1000);
   }
   if (snd->Status == BUSY) {
     return false;
-  }
+  } else
+    return true;
 }
 
 // Plays a sound between 250 and 10,000 hertz for msecs long

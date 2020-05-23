@@ -146,7 +146,7 @@ bool ev3OutReady(char ports, int maxWait) {
   return retval;
 }
 
-void ev3OutRead(char portNum, char* speed, int* steps) {
+void ev3OutRead(int8_t portNum, char* speed, int* steps) {
   if (!checkPorts(portNum, 1)) return;
   portNum >>= 1; // This is for converting the args
   if (portNum & 0x04) portNum -= 1; // This makes 0x04 into 0x03
