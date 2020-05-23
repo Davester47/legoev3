@@ -50,7 +50,7 @@ int main() {
   // Read from the color sensor on port 2
   ev3InSetMode(IN_2, 2);
   sleep(1); // If you don't wait a little bit after changing modes, you get garbage
-  int32_t color = ev3InRead(IN_2);
+  int8_t color = ev3InRead(IN_2);
 
   // Always, always, always free legoev3 when you are done
   ev3Free();
