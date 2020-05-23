@@ -91,7 +91,8 @@ int8_t ev3InSetMode(int8_t portNum, int8_t mode) {
       newdev.Connection[i] = CONN_ERROR;
     i++;
   }
-  ioctl(uartFile, UART_SET_CONN, &devcon);
+  ioctl(uartFile, UART_SET_CONN, &newdev);
+  return true;
 }
 
 // This function is hidden from the user of the library
@@ -102,7 +103,7 @@ void ev3InUpdateDevCon(void) {
     // Repeat once for every input port
     devcon.Connection[i] = ev3InGetConn(i+16);
     devcon.Type[i] = ev3InGetType(i+16);
-    // AFAIK, there is now way to read the port mode.
+    // AFAIK, there is no way to read the port mode.
     i++;
   }
 }
@@ -157,6 +158,7 @@ int32_t ev3InRead(int8_t portNum) {
           bits = 16;
       }
 
+      // Read from the shared memory
       if (bits == 8) {
         int8_t data = *((int8_t*)uartdata);
         return (int32_t)data;
@@ -170,6 +172,10 @@ int32_t ev3InRead(int8_t portNum) {
     case CONN_INPUT_DUMB:
       return (int32_t)ev3InReadAnalogRaw(portNum+16);
       break;
+
+    default:
+      // Not supported YET (if you want something else submit a PR (please!))
+      return false;
   }
 }
 
@@ -183,7 +189,7 @@ TYPE ev3InGetType(int8_t portNum) {
     if ((conn == CONN_INPUT_DUMB) && t == TYPE_UNKNOWN) {
       // touch sensor
       return TYPE_TOUCH;
-    } else if (conn = CONN_INPUT_UART) {
+    } else if (conn == CONN_INPUT_UART) {
       // Any of gyro, color, ultrasonic, or ir
       // Ask the driver about the type
       UARTCTL uctl;
