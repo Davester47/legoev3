@@ -7,11 +7,23 @@ functions can change without notice, as this is still in active development.
 ### To build
 
 An arm-linux-gnueabi (or arm-none-linux-gnueabi) GCC toolchain is required to
-build this library for the EV3. Legoev3 can be built with:
+build this library for the EV3. I don't reccommend this way anymore. Legoev3 
+can be built with:
 ```
 ./configure --prefix=/path/to/install/directory --host=arm-linux-gnueabi
 make
 make install
+```
+
+Alternatively you use meson and ninja to build legoev3. You will have to build
+legoev3 in a separate directory. I've provided a cross toolchain file for use
+with meson. It's a little more complicated, but here's how to build it:
+```
+git clone https://github.com/Davester47/legoev3.git
+mkdir build
+cd build
+meson ../legev3 --cross-file ../legoev3/cross.txt --prefix=/install/directory
+ninja install
 ```
 
 ### To use legoev3 in a program.

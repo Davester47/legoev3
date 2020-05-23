@@ -1,0 +1,12 @@
+[host_machine]
+system = 'linux'
+cpu_family = 'arm'
+cpu = 'arm928ej-s'
+endian = 'little'
+strip = false
+
+[binaries]
+c = 'arm-linux-gnueabi-gcc'
+
+[properties]
+strip = false
