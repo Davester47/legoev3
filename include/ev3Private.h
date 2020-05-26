@@ -47,4 +47,27 @@ int8_t ev3SndInit();
 void   ev3SndFree();
 void ev3InUpdateDevCon(void);
 
+#ifdef EV3_TEST
+// Code in here only runs as a part of the testsuite
+// Reading/writing and shared memory has to be spoofed with header defines
+
+// Each individual test has to define ev3Test*
+int ev3TestOpen(char* pathname);
+int ev3TestWrite(int fd, void* buf, size_t count);
+void * ev3TestMmap(int fd);
+
+#define open(pathname, ...) \
+    ev3TestOpen(pathname);
+
+#define write(fd, buf, count) \
+    ev3TestWrite(fd, buf, count);
+
+#define close(fd) {} // Nothing
+
+#define mmap(addr, length, prot, flags, fd, ...) \
+    ev3TestMmap(fd);
+
+#define munmap(...) {} // Define to nothing
+
+#endif // EV3_TEST
 #endif // EV3_PRIVATE_H

@@ -44,7 +44,7 @@ int8_t ev3SndInit() {
 // waits at most maxWait seconds for it to be done
 int8_t ev3SndReady(int maxWait) {
   time_t startTime = time(NULL);
-  while ((difftime(startTime, time(NULL)) < maxWait || maxWait < 0) && maxWait) {
+  while (((difftime(time(NULL), startTime) < maxWait) || (maxWait < 0)) && maxWait) {
     if (snd->Status != BUSY) {
       return true;
     }

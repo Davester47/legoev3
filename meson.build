@@ -21,3 +21,13 @@ ev3 = static_library('egoev3', src, include_directories: inc, install: true,
 # Build the example
 executable('example', 'examples/example.c', include_directories: inc,
     link_with: ev3, native: false)
+
+
+# Build the library for the build machine for testing purposes
+test = static_library('test_lib', src, include_directories:inc, native:true,
+    c_args: '-DEV3_TEST')
+
+
+e = executable('snd', 'tests/snd.c', include_directories: inc, native: true,
+    link_with: test)
+test('ev3Snd.c', e)
