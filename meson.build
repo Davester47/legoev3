@@ -24,10 +24,14 @@ executable('example', 'examples/example.c', include_directories: inc,
 
 
 # Build the library for the build machine for testing purposes
-test = static_library('test_lib', src, include_directories:inc, native:true,
-    c_args: '-DEV3_TEST')
+test = static_library('test_lib', [src, 'tests/common.c'], include_directories:inc, 
+    native: true, c_args: '-DEV3_TEST')
 
-
-e = executable('snd', 'tests/snd.c', include_directories: inc, native: true,
-    link_with: test)
-test('ev3Snd.c', e)
+# Each test is ['exename', 'srcfile']
+tests = [['sound', 'tests/snd.c']]
+# Build & link the tests
+foreach t : tests
+    e = executable(t[0], t[1], include_directories: inc, native: true,
+        link_with: test)
+    test(t[0], e)
+endforeach

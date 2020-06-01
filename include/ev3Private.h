@@ -50,11 +50,7 @@ void ev3InUpdateDevCon(void);
 #ifdef EV3_TEST
 // Code in here only runs as a part of the testsuite
 // Reading/writing and shared memory has to be spoofed with header defines
-
-// Each individual test has to define ev3Test*
-int ev3TestOpen(char* pathname);
-int ev3TestWrite(int fd, void* buf, size_t count);
-void * ev3TestMmap(int fd);
+#include <test.h> // For ev3Test*
 
 #define open(pathname, ...) \
     ev3TestOpen(pathname);
