@@ -1,4 +1,3 @@
-# 'lib' will be prefixed to the project name, -legoev3 will link in GCC
 project('legoev3', 'c', version: '0.1A')
 
 # Define the source files
@@ -14,14 +13,13 @@ inc = include_directories('include')
 hdrs = ['include/ev3.h', 'include/pitches.h']
 install_headers(hdrs)
 
-# Build the library
+# Build the library. 'egoev3' because 'lib' will be appended on it
 ev3 = static_library('egoev3', src, include_directories: inc, install: true,
     install_dir: 'lib', native: false)
 
 # Build the example
 executable('example', 'examples/example.c', include_directories: inc,
     link_with: ev3, native: false)
-
 
 # Build the library for the build machine for testing purposes
 test = static_library('test_lib', [src, 'tests/common.c'], include_directories:inc, 
