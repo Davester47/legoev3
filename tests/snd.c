@@ -27,7 +27,8 @@ int main(int argc, char *argv[]) {
     NULL
   };
   void* ptrs[] = {
-    &sound
+    &sound,
+    NULL
   };
   ev3TestInit(names, ptrs);
   ev3SndInit();

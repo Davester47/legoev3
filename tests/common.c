@@ -85,7 +85,7 @@ void * ev3TestMmap(int fd) {
   return ptrs[fd-1]; // ptrs = 0 based, fd = 1 based
 }
 
-int exitCode = 0;
+static int exitCode = 0;
 void ev3TestAssert() {
   if (!result) {
     printf("FAIL\n");

@@ -26,7 +26,8 @@ test = static_library('test_lib', [src, 'tests/common.c'], include_directories:i
     native: true, c_args: '-DEV3_TEST')
 
 # Each test is ['exename', 'srcfile']
-tests = [['sound', 'tests/snd.c']]
+tests = [['sound', 'tests/snd.c'],
+         ['buttons', 'tests/btn.c']]
 # Build & link the tests
 foreach t : tests
     e = executable(t[0], t[1], include_directories: inc, native: true,

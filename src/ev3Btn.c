@@ -20,8 +20,8 @@
 #include <ev3Private.h>
 
 // global variables
-UI* ui = MAP_FAILED;
-int uiFile = -1;
+static UI* ui = MAP_FAILED;
+static int uiFile = -1;
 
 int8_t ev3BtnInit(void) {
   // Open the file
@@ -52,7 +52,7 @@ void ev3SetLEDPattern(int8_t pattern) {
 int8_t ev3BtnRead(int8_t button) {
   // Read the button value from shared memory
   if (button == NO_BUTTON || button > ANY_BUTTON) return 0;
-  return button = ui->Pressed[button-1];
+  return ui->Pressed[button-1];
 }
 
 void ev3BtnFree() {
