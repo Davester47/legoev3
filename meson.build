@@ -34,3 +34,13 @@ foreach t : tests
         link_with: test)
     test(t[0], e)
 endforeach
+
+# Generate a pkg-config file
+pkg = import('pkgconfig')
+pkg.generate(
+    libraries: ev3,
+    name: 'legoev3',
+    filebase: 'legoev3',
+    description: 'A C library for Lego Mindstorms',
+    install_dir: 'lib/pkgconfig'
+)
